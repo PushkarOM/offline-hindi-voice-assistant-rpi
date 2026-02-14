@@ -3,12 +3,14 @@ from audio.input_stream import MicStream
 from asr.streaming_asr import StreamingASR
 from nlp.intent_parser import detect_intent
 from tts.responses import RESPONSES
-from tts.hindi_tts import speak
+from tts.hindi_tts import AsyncTTS
+
 
 
 class StreamingAssistant:
 
-    def __init__(self):
+    def __init__(self, tts):
+        self.tts = tts
         self.mic = MicStream()
         self.asr = StreamingASR()
 
@@ -30,6 +32,6 @@ class StreamingAssistant:
                 logging.info(f"Intent: {intent}")
 
                 response = RESPONSES.get(intent, RESPONSES["UNKNOWN"])
-                speak(response)
+                self.tts.speak(response)
 
                 self.asr.reset()

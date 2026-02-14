@@ -7,7 +7,7 @@ from audio.input_stream import MicStream
 from asr.streaming_asr import StreamingASR
 from nlp.intent_parser import detect_intent
 from tts.responses import RESPONSES
-from tts.hindi_tts import speak
+from tts.hindi_tts import AsyncTTS
 from config.settings import RESULTS_DIR
 
 
@@ -30,53 +30,72 @@ def log_to_file(lines):
 
 def main():
     output = []
-    output.append("=== Streaming Latency Benchmark ===")
+    output.append("=== Streaming Latency Benchmark (Competition Mode) ===")
 
     process = psutil.Process(os.getpid())
     process.cpu_percent(interval=None)
 
     mic = MicStream()
     asr = StreamingASR()
+    tts = AsyncTTS()
 
     mic.start()
-
     print("Speak now...")
 
-    t0 = now()
+    speech_start_time = None
+    command_detect_time = None
     final_text = None
 
+    # --- ASR Phase ---
     while True:
         chunk = mic.read_chunk()
         if not chunk:
             continue
 
+        # Mark first audio chunk as speech start
+        if speech_start_time is None:
+            speech_start_time = now()
+
         text = asr.process_chunk(chunk)
 
         if text:
             final_text = text
+            command_detect_time = now()
+            asr.reset()
             break
 
-    t1 = now()
-
+    # --- Intent Phase ---
     intent = detect_intent(final_text)
-    t2 = now()
+    intent_time = now()
 
+    # --- TTS Phase ---
     response = RESPONSES.get(intent, RESPONSES["UNKNOWN"])
-    speak(response)
-    t3 = now()
+    tts_start_time = now()
+    tts.speak(response)
+
+    # Wait for playback to finish
+    tts.queue.join()
+    tts_end_time = now()
 
     mic.stop()
 
     cpu = process.cpu_percent(interval=None)
     mem = process.memory_info().rss / (1024 * 1024)
 
+    # ----- Calculations -----
+    speech_duration = (command_detect_time - speech_start_time) * 1000
+    processing_latency = (tts_start_time - command_detect_time) * 1000
+    tts_playback_time = (tts_end_time - tts_start_time) * 1000
+    full_completion = (tts_end_time - speech_start_time) * 1000
+
     output.extend([
-        f"CPU usage         : {cpu:.1f} %",
-        f"Memory usage      : {mem:.1f} MB",
-        f"ASR latency       : {(t1 - t0) * 1000:.1f} ms",
-        f"Intent latency    : {(t2 - t1) * 1000:.2f} ms",
-        f"TTS latency       : {(t3 - t2) * 1000:.1f} ms",
-        f"End-to-End latency: {(t3 - t0) * 1000:.1f} ms",
+        f"CPU usage                 : {cpu:.1f} %",
+        f"Memory usage              : {mem:.1f} MB",
+        "",
+        f"Speech duration           : {speech_duration:.1f} ms",
+        f"Processing latency        : {processing_latency:.1f} ms  <-- Competition Metric",
+        f"TTS playback duration     : {tts_playback_time:.1f} ms",
+        f"Full completion time      : {full_completion:.1f} ms",
         "",
         f"ASR Output : {final_text}",
         f"Intent     : {intent}"

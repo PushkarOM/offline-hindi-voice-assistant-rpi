@@ -1,6 +1,6 @@
 import logging
 from config.settings import LOG_PATH
-from tts.hindi_tts import speak
+from tts.hindi_tts import AsyncTTS
 from pipeline.streaming_pipeline import StreamingAssistant
 
 
@@ -12,9 +12,15 @@ logging.basicConfig(
 
 
 def main():
-    speak("नमस्ते, सहायक शुरू हो गया है")
+    # Initialize shared TTS engine
+    tts = AsyncTTS()
 
-    assistant = StreamingAssistant()
+    # Startup message
+    tts.speak("नमस्ते, सहायक शुरू हो गया है")
+    tts.queue.join()  # wait until startup speech finishes
+
+    # Start streaming assistant
+    assistant = StreamingAssistant(tts=tts)
     assistant.run()
 
 

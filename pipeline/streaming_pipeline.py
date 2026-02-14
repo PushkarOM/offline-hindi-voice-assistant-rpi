@@ -2,8 +2,7 @@ import logging
 from audio.input_stream import MicStream
 from asr.streaming_asr import StreamingASR
 from nlp.intent_parser import detect_intent
-from tts.responses import RESPONSES
-from tts.hindi_tts import AsyncTTS
+from tts.responses import generate_response
 
 
 
@@ -31,7 +30,7 @@ class StreamingAssistant:
                 intent = detect_intent(text)
                 logging.info(f"Intent: {intent}")
 
-                response = RESPONSES.get(intent, RESPONSES["UNKNOWN"])
+                response = generate_response(intent, text)
                 self.tts.speak(response)
 
                 self.asr.reset()

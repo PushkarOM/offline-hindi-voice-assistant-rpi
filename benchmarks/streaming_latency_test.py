@@ -6,7 +6,7 @@ from datetime import datetime
 from audio.input_stream import MicStream
 from asr.streaming_asr import StreamingASR
 from nlp.intent_parser import detect_intent
-from tts.responses import RESPONSES
+from tts.responses import generate_response
 from tts.hindi_tts import AsyncTTS
 from config.settings import RESULTS_DIR
 
@@ -69,7 +69,7 @@ def main():
     intent_time = now()
 
     # --- TTS Phase ---
-    response = RESPONSES.get(intent, RESPONSES["UNKNOWN"])
+    response = generate_response(intent, text)
     tts_start_time = now()
     tts.speak(response)
 

@@ -5,13 +5,13 @@ import subprocess
 import psutil
 from datetime import datetime
 from nlp.intent_parser import extract_timer_duration
-from tts.hindi_tts import AsyncTTS
+
 
 
 active_timers = []
 
 def start_timer(seconds, speak_function):
-    
+
     def timer_thread():
         time.sleep(seconds)
         speak_function.speak("टाइमर पूरा हुआ")
@@ -20,7 +20,7 @@ def start_timer(seconds, speak_function):
     active_timers.append(t)
     t.start()
 
-def generate_response(intent, original_text=None):
+def generate_response(intent, original_text=None, tts=None):
 
     #  WAKE 
     if intent == "WAKE":
@@ -145,7 +145,6 @@ def generate_response(intent, original_text=None):
 
     #  TIMER 
     elif intent == "TIMER":
-        tts = AsyncTTS()
 
         seconds = extract_timer_duration(original_text or "")
 
@@ -158,7 +157,7 @@ def generate_response(intent, original_text=None):
 
     #  EXIT 
     elif intent == "EXIT":
-        return "ठीक है, बंद हो रही हूँ"
+        return "ठीक है, स्लीप मोड में जा रही हूँ"
 
     #  UNKNOWN 
     else:

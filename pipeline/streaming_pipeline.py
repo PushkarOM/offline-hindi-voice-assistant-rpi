@@ -42,10 +42,10 @@ class StreamingAssistant:
                     self.unknown_count = 0
 
             if text:
-                logging.info(f"ASR: {text}")
 
+                logging.info(f"ASR: {text}")
                 intent = detect_intent(text)
-                logging.info(f"Intent: {intent}")
+                logging.info(f"Intent, Processed Text : {intent}")
                 logging.info(f"State: {self.state}")
 
                 # IDLE MODE
@@ -63,16 +63,18 @@ class StreamingAssistant:
 
                     if intent == "UNKNOWN":
                         self.unknown_count += 1
+                        self.active_since = time.time()
 
                         if self.unknown_count <= self.max_unknown:
                             self.tts.speak("माफ़ कीजिए, दोबारा कहिए")
+                            time.sleep(2)
                         else:
                             response = generate_response(intent, text)
                             self.tts.speak(response)
                             self.state = "IDLE"
                             self.active_since = None
                             self.unknown_count = 0
-
+                    
                         self.asr.reset()
                         continue
 
@@ -87,7 +89,7 @@ class StreamingAssistant:
                         self.asr.reset()
                         continue
                     
-                    # Reset timer and unknown_command after valid command
+                    # Reset, timer and unknown_command after valid command
                     self.unknown_count = 0
                     self.active_since = time.time()
                     self.asr.reset()

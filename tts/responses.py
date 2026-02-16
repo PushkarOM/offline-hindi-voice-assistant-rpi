@@ -149,7 +149,6 @@ def generate_response(intent, original_text=None, tts=None):
         seconds = extract_timer_duration(original_text or "")
 
         if seconds:
-            from timer_manager import start_timer
             start_timer(seconds,tts)   
             return f"{seconds} सेकंड का टाइमर लगा दिया गया है"
 

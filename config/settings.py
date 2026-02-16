@@ -1,3 +1,5 @@
+import pyaudio
+
 SAMPLE_RATE = 16000
 CHANNELS = 1
 CHUNK = 1024

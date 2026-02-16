@@ -5,7 +5,7 @@ import os
 
 MODEL_PATH = os.path.join(
     os.path.dirname(__file__),
-    "models",
+    "model",
     "vosk-model-small-hi-0.22"
 )
 

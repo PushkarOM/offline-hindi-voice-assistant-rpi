@@ -4,3 +4,4 @@ soundfile
 pyaudio
 Vosk
 webrtcvad
+rapidfuzz

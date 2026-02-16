@@ -20,7 +20,7 @@ def start_timer(seconds, speak_function):
     active_timers.append(t)
     t.start()
 
-def generate_response(intent, original_text=None):
+def generate_response(intent, original_text = None, processed_text = None):
 
     #  WAKE 
     if intent == "WAKE":
@@ -147,10 +147,9 @@ def generate_response(intent, original_text=None):
     elif intent == "TIMER":
         tts = AsyncTTS()
 
-        seconds = extract_timer_duration(original_text or "")
+        seconds = extract_timer_duration(processed_text)
 
         if seconds:
-            from timer_manager import start_timer
             start_timer(seconds,tts)   
             return f"{seconds} सेकंड का टाइमर लगा दिया गया है"
 

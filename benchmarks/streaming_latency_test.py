@@ -65,11 +65,11 @@ def main():
             break
 
     # --- Intent Phase ---
-    intent = detect_intent(final_text)
+    intent, processed_text = detect_intent(final_text)
     intent_time = now()
 
     # --- TTS Phase ---
-    response = generate_response(intent, text)
+    response = generate_response(intent, final_text, processed_text)
     tts_start_time = now()
     tts.speak(response)
 
@@ -97,7 +97,7 @@ def main():
         f"TTS playback duration     : {tts_playback_time:.1f} ms",
         f"Full completion time      : {full_completion:.1f} ms",
         "",
-        f"ASR Output : {final_text}",
+        f"ASR Output : {processed_text}",
         f"Intent     : {intent}"
     ])
 

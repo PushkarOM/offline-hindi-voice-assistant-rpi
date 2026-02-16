@@ -27,10 +27,11 @@ class StreamingAssistant:
             if text:
                 logging.info(f"ASR: {text}")
 
-                intent = detect_intent(text)
+                intent, processed_text = detect_intent(text)
+                logging.info(f"Processed Text: {processed_text}")
                 logging.info(f"Intent: {intent}")
 
-                response = generate_response(intent, text)
+                response = generate_response(intent, text, processed_text)
                 self.tts.speak(response)
 
                 self.asr.reset()

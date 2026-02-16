@@ -44,14 +44,14 @@ class StreamingAssistant:
             if text:
 
                 logging.info(f"ASR: {text}")
-                intent  = detect_intent(text)
-                logging.info(f"Intent, Processed Text : {intent}")
+                intent, processed_text  = detect_intent(text)
+                logging.info(f"Intent, Processed Text : {intent} , {processed_text}")
                 logging.info(f"State: {self.state}")
 
                 # IDLE MODE
                 if self.state == "IDLE":
                     if intent == "WAKE":
-                        response = generate_response("WAKE", text)
+                        response = generate_response("WAKE", text, processed_text)
                         self.tts.speak(response)
                         self.state = "ACTIVE"
                         self.active_since = time.time()
@@ -69,7 +69,7 @@ class StreamingAssistant:
                             self.tts.speak("माफ़ कीजिए, दोबारा कहिए")
                             time.sleep(2)
                         else:
-                            response = generate_response(intent, text)
+                            response = generate_response(intent, text, processed_text)
                             self.tts.speak(response)
                             self.state = "IDLE"
                             self.active_since = None
@@ -79,7 +79,7 @@ class StreamingAssistant:
                         continue
 
 
-                    response = generate_response(intent, text, self.tts)
+                    response = generate_response(intent, text, processed_text, self.tts)
                     self.tts.speak(response)
 
                     # force sleep

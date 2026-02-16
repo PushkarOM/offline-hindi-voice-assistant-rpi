@@ -20,7 +20,7 @@ def start_timer(seconds, speak_function):
     active_timers.append(t)
     t.start()
 
-def generate_response(intent, original_text = None, processed_text = None):
+def generate_response(intent, original_text = None, processed_text = None, tts = None):
 
     #  WAKE 
     if intent == "WAKE":

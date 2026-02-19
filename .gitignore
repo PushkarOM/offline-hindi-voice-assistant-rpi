@@ -22,3 +22,4 @@ __pycache__/
 vosk-model-small-hi-0.22/
 *.zip
 
+va_scripts/

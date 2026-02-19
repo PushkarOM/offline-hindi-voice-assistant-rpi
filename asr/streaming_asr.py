@@ -1,8 +1,24 @@
 import json
-from vosk import KaldiRecognizer
-from asr.hindi_asr import load_model
+import os
+from vosk import KaldiRecognizer, Model
 from nlp.intents import INTENTS
 
+MODEL_PATH = os.path.join(
+    os.path.dirname(__file__),
+    "model",
+    "vosk-model-small-hi-0.22"
+)
+
+_model = None
+
+
+def load_model():
+    global _model
+    if _model is None:
+        if not os.path.exists(MODEL_PATH):
+            raise RuntimeError("Vosk Hindi model not found")
+        _model = Model(MODEL_PATH)
+    return _model
 
 # Extract only single-word commands
 COMMANDS = []

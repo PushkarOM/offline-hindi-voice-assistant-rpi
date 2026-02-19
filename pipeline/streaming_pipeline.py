@@ -13,7 +13,7 @@ class StreamingAssistant:
         
         self.state = "IDLE"
         self.active_since = None
-        self.active_timeout = 10 # seconds
+        self.active_timeout = 30 # seconds
         self.unknown_count = 0
         self.max_unknown = 2
         

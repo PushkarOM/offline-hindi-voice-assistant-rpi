@@ -25,6 +25,18 @@ STOPWORDS = {
 
 
 def normalize(text):
+
+    """
+        Normalize input Hindi text for consistent processing.
+
+        - Converts text to lowercase and strips whitespace
+        - Applies Unicode normalization (NFKC)
+        - Replaces common nukta characters with base forms
+        - Normalizes specific word variants (e.g., आवाज)
+        - Removes extra spaces
+        Returns cleaned string.
+    """
+
     if not text:
         return ""
 
@@ -50,6 +62,15 @@ def normalize(text):
 
 
 def remove_fillers(text):
+
+    """
+        Remove polite/filler words from text.
+
+        - Deletes predefined filler words (Hindi/English)
+        - Normalizes extra whitespace
+        Returns cleaned string.
+    """
+
     for word in FILLERS:
         text = text.replace(word, "")
     return re.sub(r"\s+", " ", text).strip()
@@ -57,6 +78,16 @@ def remove_fillers(text):
 
 
 def clean_pattern(pattern):
+
+    """
+        Clean regex pattern into plain text for similarity comparison.
+
+        - Removes regex-specific tokens (\\s*, \\b, special symbols, etc.)
+        - Strips escape characters
+        - Normalizes whitespace
+        Returns simplified pattern string.
+    """
+
     pattern = re.sub(r"\\s\*", " ", pattern)
     pattern = re.sub(r"\\s\+", " ", pattern)
     pattern = re.sub(r"\\b", "", pattern)
@@ -68,6 +99,15 @@ def clean_pattern(pattern):
 
 
 def tokenize(text):
+
+    """
+        Tokenize text into words while removing structural stopwords.
+
+        - Splits text on spaces
+        - Filters out predefined Hindi stopwords
+        Returns list of meaningful tokens.
+    """
+
     return [
         word for word in text.split()
         if word not in STOPWORDS
@@ -75,6 +115,15 @@ def tokenize(text):
 
 
 def cosine_similarity(text1, text2):
+    
+    """
+        Compute cosine similarity between two texts.
+
+        - Converts texts into word frequency vectors
+        - Calculates dot product and vector magnitudes
+        - Returns similarity score between 0.0 and 1.0
+    """
+    
     words1 = tokenize(text1)
     words2 = tokenize(text2)
 
@@ -97,6 +146,15 @@ def cosine_similarity(text1, text2):
 
 
 def pattern_score(pattern, text):
+
+    """
+        Calculate similarity score between a regex pattern and input text.
+
+        - Cleans regex pattern into plain text
+        - Computes cosine similarity with input text
+        Returns similarity score.
+    """
+
     clean = clean_pattern(pattern)
 
     if not clean:
@@ -157,6 +215,21 @@ def extract_timer_duration(text):
 
 
 def detect_intent(text):
+
+    """
+        Detect user intent from input text.
+
+        Processing steps:
+        - Normalize text
+        - Remove filler words
+        - Normalize numbers
+        - Attempt exact regex pattern match
+        - Fallback to cosine similarity matching
+
+        Returns:
+        (intent, processed_text) or ("UNKNOWN", processed_text)
+    """
+
     if not text:
         return None
 

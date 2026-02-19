@@ -11,6 +11,9 @@ from tts.hindi_tts import AsyncTTS
 active_timers = []
 
 def start_timer(seconds, speak_function):
+    """
+    Function Define a Timer Thread and runs it in the background
+    """
     
     def timer_thread():
         time.sleep(seconds)

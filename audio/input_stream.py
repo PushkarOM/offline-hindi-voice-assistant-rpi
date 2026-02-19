@@ -2,9 +2,11 @@ import subprocess
 
 class MicStream:
     def __init__(self, device="plughw:CARD=sndrpigooglevoi,DEV=0"):
+        # Store ALSA device name
         self.device = device
 
     def start(self):
+        # Start arecord process to capture raw audio from mic
          self.process = subprocess.Popen(
             [
                 "arecord",
@@ -22,6 +24,8 @@ class MicStream:
 
     def read_chunk(self, frames=2000):
         bytes_per_frame = 2  # mono 16-bit
+
+        # Read raw audio bytes from process
         raw = self.process.stdout.read(frames * bytes_per_frame)
 
         if not raw:
@@ -30,4 +34,5 @@ class MicStream:
         return raw
 
     def stop(self):
+        # Stop recording process
         self.process.terminate()

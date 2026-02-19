@@ -13,6 +13,9 @@ _model = None
 
 
 def load_model():
+    """
+    Check if the Model Files are installed, if yes Load the Model
+    """
     global _model
     if _model is None:
         if not os.path.exists(MODEL_PATH):
@@ -29,6 +32,7 @@ for phrases in INTENTS.values():
 
 
 class StreamingASR:
+    
     def __init__(self):
         self.model = load_model()
         self.rec = KaldiRecognizer(self.model, 16000)

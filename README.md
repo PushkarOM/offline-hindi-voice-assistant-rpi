@@ -1,50 +1,239 @@
-## Project Description
+# 🗣 Offline Hindi Voice Assistant (ARM Edge Deployment)
 
-Students will build an embedded speech pipeline performing:
+A fully offline, privacy-preserving Hindi Voice Assistant optimized for ARM-based edge devices such as the Raspberry Pi 4.
 
-* Speech-to-text using a lightweight ASR model (e.g., Coqui STT or fine-tuned wav2vec2 for Hindi).
-* Command parsing and intent recognition in Python.
-* Text-to-speech responses using local TTS (eSpeak-NG or Festival).
-* End-to-end execution on the Raspberry Pi CPU with no cloud dependency.
+Built as part of the **Bharat AI-SoC Student Challenge 2026**, this project demonstrates an end-to-end embedded speech pipeline executing entirely on-device without any cloud dependency.
 
 ---
 
-## Key Requirements
+## 🚀 Project Overview
 
-### Hardware
+The system implements a real-time streaming speech pipeline:
 
-* Raspberry Pi 4 (or similar Arm SBC)
-* USB microphone
-* Speaker via 3.5 mm jack or HDMI
+Microphone → Audio Stream → Vosk ASR → NLP Engine → State Manager → Action Layer → TTS → Speaker
 
-### Software
+All processing is performed locally on the Raspberry Pi CPU, ensuring:
 
-* Python with PyAudio for audio I/O
-* Coqui STT or fine-tuned wav2vec2 for ASR
-* eSpeak-NG or Festival for TTS
-* Custom Python logic for intent recognition and command execution
+- ✅ Complete offline operation  
+- 🔒 Data privacy  
+- ⚡ Low latency  
+- 🧠 Edge AI deployment feasibility  
 
 ---
 
-## Performance Targets
+## 🎯 Key Features
 
-* Sub-2-second response time per command
-* Accurate recognition for 10–15 Hindi commands
-* Robust, fully offline operation
-
----
-
-## Deliverables
-
-* Source code for the full voice assistant pipeline
-* Documentation of any model fine-tuning or optimization steps
-* Demo video showing responses to multiple commands
-* Short report on architecture, challenges in Hindi ASR/TTS, and performance metrics
+- Fully offline Hindi speech recognition
+- Streaming-based low-latency ASR
+- Rule-based NLP with cosine similarity fallback
+- Wake-word activation
+- Timer and basic command support
+- Modular architecture
+- Streaming benchmark mode for performance evaluation
 
 ---
 
-## Learning Outcomes
+## 🧠 Speech Pipeline Components
 
-* Hands-on experience with embedded speech AI and offline ASR/TTS
-* Understanding challenges of regional language processing
-* Integrating ASR, simple NLP/intent logic, and TTS on a constrained platform
+### 1️⃣ Automatic Speech Recognition (ASR)
+
+- Engine: **Vosk (Small Hindi Model)**
+- Sampling Rate: 16 kHz
+- Streaming inference
+- Optimized for ARM CPU
+
+Why Vosk?
+- Lightweight (~50 MB model)
+- Fully offline
+- ARM compatible
+- Low memory footprint
+
+---
+
+### 2️⃣ Intent Recognition (NLP)
+
+Two-step detection mechanism:
+
+**Step 1 – Rule-Based Matching**
+- Text normalization
+- Filler word removal
+- Regex-based pattern extraction
+- Keyword mapping
+
+**Step 2 – Cosine Similarity Fallback**
+- TF-IDF vectorization
+- Semantic similarity comparison
+- Handles transcription variations (e.g., nukta differences)
+
+This hybrid approach improves robustness without heavy transformer models, making it suitable for edge deployment.
+
+---
+
+### 3️⃣ Text-to-Speech (TTS)
+
+- Engine: **eSpeak-NG**
+- Fully offline
+- Low-latency response generation
+- Hindi-compatible output
+
+---
+
+## 💻 Hardware Requirements
+
+- Raspberry Pi 4 Model B (4GB recommended)
+- USB or I2S Microphone (e.g., INMP441)
+- Speaker (3.5mm jack or HDMI)
+- microSD card (16GB+)
+- Stable power supply
+
+---
+
+## 🧰 Software Requirements
+
+- Raspberry Pi OS (64-bit recommended)
+- Python 3.10+
+- PyAudio
+- Vosk
+- eSpeak-NG
+- NumPy
+- scikit-learn (for cosine similarity)
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🛠 System Setup (Raspberry Pi)
+
+Before installing Python dependencies, you must install required system-level packages.
+
+👉 See detailed setup instructions here:  
+[System Dependencies Guide](./system-deps.md)
+
+
+---
+
+## ⚙️ Running the Assistant
+Start the assistant:
+
+```bash
+python main.py
+```
+
+---
+
+## 📊 Sample Streaming Benchmark Output
+For Benchmarks Refer to the 
+[Benchmarks Guide](./benchmarks/README.md)
+
+
+```bash
+=== Streaming Latency Benchmark (Competition Mode) ===
+CPU usage                 : 53.4 %
+Memory usage              : 162.0 MB
+
+Speech duration           : 4565.9 ms
+Processing latency        : 253.4 ms
+TTS playback duration     : 3342.8 ms
+Full completion time      : 8162.1 ms
+
+ASR Output : 10 सेकेंड का टाइमर लगा
+Intent     : TIMER
+```
+---
+
+## 🗂 Project Structure
+
+```bash
+tree -I "venv|__pycache__|model"
+.
+├── LICENSE
+├── README.md
+├── asr
+│   ├── __init__.py
+│   └── streaming_asr.py
+├── audio
+│   ├── __init__.py
+│   └── input_stream.py
+├── benchmarks
+│   ├── README.md
+│   ├── results
+│   └── streaming_latency_test.py
+├── config
+│   ├── __init__.py
+│   ├── env.py
+│   └── settings.py
+├── logs
+│   └── assistant.log
+├── main.py
+├── nlp
+│   ├── __init__.py
+│   ├── intent_parser.py
+│   ├── intents.py
+│   └── number_normalizer.py
+├── pipeline
+│   └── streaming_pipeline.py
+├── requirements.txt
+├── system-deps.md
+└── tts
+    ├── __init__.py
+    ├── hindi_tts.py
+    └── responses.py
+
+9 directories, 23 files
+```
+
+---
+
+## 🔬 Optimization Highlights
+
+- Lightweight ASR model selection
+- Streaming inference instead of batch processing
+- Event-driven state management
+- Minimal background processes=
+- ARM CPU-friendly architecture
+
+Designed specifically for Edge AI deployment on AI-SoC platforms.
+
+---
+
+## 🔒 Privacy & Edge AI
+
+- No internet usage
+- No cloud APIs
+- No data transmission
+- All inference performed locally
+
+Ensures privacy-preserving intelligent interaction.
+
+---
+
+## 🎥 Demo Video
+
+👉 [Watch Demo on YouTube](https://youtu.be/ryDRLKcCcr8?si=5ujjtuz32ikEVcwN)
+
+---
+
+## 📚 References
+
+- Vosk Speech Recognition Toolkit  
+- eSpeak-NG Documentation  
+- Raspberry Pi 4 Specifications  
+- ARM Architecture Reference Manual  
+
+---
+
+## 👨‍💻 Authors
+
+**Pushkar Chaturvedi**  
+**Rishabh Jain**  
+
+#### Mentor : **Mr Ajay Kumar** (JUET) 
+
+Jaypee University of Engineering & Technology  
+Bharat AI-SoC Student Challenge 2026
+
+---

@@ -88,6 +88,75 @@ This hybrid approach improves robustness without heavy transformer models, makin
 
 ---
 
+## 🛠 System Setup (Raspberry Pi)
+
+Before running the assistant, ensure that the Raspberry Pi audio interface is properly configured.
+
+### 🎙 I2S Microphone Configuration
+
+If using an I2S microphone (e.g., INMP441) or Google Voice HAT, update the Raspberry Pi boot configuration:
+
+Open the configuration file:
+
+```bash
+sudo nano /boot/config.txt
+```
+
+Add the Following Lines :
+
+```bash
+dtparam=i2s=on
+dtoverlay=googlevoicehat-soundcard
+```
+
+Save and Reboot, After reboot verify if the sound card is detected :
+
+```bash
+arecord -l
+```
+
+### 2️⃣ USB Microphone Setup (Recommended)
+
+If using a USB microphone:
+- No dtoverlay configuration is required.
+- Simply plug in the USB microphone.
+- Reboot (optional but recommended).
+
+Verify detection:
+```bash
+arecord -l
+```
+
+You should see something similar to:
+```bash
+card 1: Device [USB Audio Device], device 0
+```
+
+
+For maximum compatibility across different hardware setups, configure the microphone device in the code as:
+[Input Stream](./audio/input_stream.py)
+
+```bash
+device="default"  # if usb
+```
+
+#### if dtoverlay used with a different mic module
+
+```bash
+device="plughw:CARD=sndrpigooglevoi,DEV=0" 
+```
+
+### Installing System Level Packages
+
+Before installing Python dependencies, you must install required system-level packages.
+
+👉 See detailed setup instructions here:  
+[System Dependencies Guide](./system-deps.md)
+
+
+---
+
+
 ## 🧰 Software Requirements
 
 - Raspberry Pi OS (64-bit recommended)
@@ -103,16 +172,6 @@ Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-
----
-
-## 🛠 System Setup (Raspberry Pi)
-
-Before installing Python dependencies, you must install required system-level packages.
-
-👉 See detailed setup instructions here:  
-[System Dependencies Guide](./system-deps.md)
-
 
 ---
 

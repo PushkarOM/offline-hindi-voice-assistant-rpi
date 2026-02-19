@@ -39,7 +39,7 @@
 | **SCK**    | Pin 12            | GPIO18 (PCM_CLK) |
 | **WS**     | Pin 35            | GPIO19 (PCM_FS)  |
 | **SD**     | Pin 38            | GPIO20 (PCM_DIN) |
-| **L/R**    | GND               | — (Left Channel) |
+| **L/R**    | Pin 6             | GND |
 | **VDD**    | Pin 1 or 17       | 3.3V |
 | **GND**    | Pin 6             | GND |
 
@@ -63,6 +63,7 @@
 | High PSR                     | −75 dBFS         |
 | Shipping Weight              | 0.02 kg          |
 | Shipping Dimensions          | 6 × 5 × 3 cm     |
+
 
 
 

@@ -7,8 +7,6 @@ Students will build an embedded speech pipeline performing:
 * Text-to-speech responses using local TTS (eSpeak-NG or Festival).
 * End-to-end execution on the Raspberry Pi CPU with no cloud dependency.
 
----
-
 ## Key Requirements
 
 ### Hardware
@@ -24,15 +22,11 @@ Students will build an embedded speech pipeline performing:
 * eSpeak-NG or Festival for TTS
 * Custom Python logic for intent recognition and command execution
 
----
-
 ## Performance Targets
 
 * Sub-2-second response time per command
 * Accurate recognition for 10–15 Hindi commands
 * Robust, fully offline operation
-
----
 
 ## Deliverables
 
@@ -40,8 +34,6 @@ Students will build an embedded speech pipeline performing:
 * Documentation of any model fine-tuning or optimization steps
 * Demo video showing responses to multiple commands
 * Short report on architecture, challenges in Hindi ASR/TTS, and performance metrics
-
----
 
 ## Learning Outcomes
 

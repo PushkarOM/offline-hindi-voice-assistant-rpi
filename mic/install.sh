@@ -1,11 +1,11 @@
 # NOTE!:
-#---------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------
 # No use the latest version of the RPi OS thus INMP441 does not support or dected by the RPi.
 # For the L/R connected with GPIO to GND Default channel will be the Left.
-#---------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------
 
 # Pre Request:
-# ---------------------------------------------
+# -------------------------------------------------
 # Upgrade & Update 
 sudo apt-get update && sudo apt-get upgrade -y
 
@@ -20,7 +20,7 @@ pip install --upgrade pip
 
 # Deactivation enviroment.
 deactivate
-# ---------------------------------------------
+# ------------------------------------------------
 
 # All this library will be in enviroment folder:
 #--------------------------------------------------------------------------------
@@ -53,3 +53,4 @@ arecord -l
 
 # Used to record digital audio from the INMP441 microphone.
 arecord -D plughw:1,0 -f S32_LE -r 16000 test.wav
+

@@ -1,3 +1,4 @@
+from rapidfuzz import process, fuzz
 import re
 
 
@@ -81,23 +82,23 @@ HINDI_NUMBERS = {
 # Normalize Hindi numbers in text
 
 def normalize_numbers(text: str) -> str:
-    """
-    Converts Hindi number words (0–60) into digits.
-    Example:
-        'दस मिनट का टाइमर' → '10 मिनट का टाइमर'
-    """
 
     words = text.split()
     converted = []
 
     for word in words:
-        # Remove punctuation around word
         clean_word = re.sub(r"[^\w]", "", word)
 
-        if clean_word in HINDI_NUMBERS:
-            converted.append(str(HINDI_NUMBERS[clean_word]))
+        # Find best fuzzy match
+        match = process.extractOne(
+            clean_word,
+            HINDI_NUMBERS.keys(),
+            scorer=fuzz.ratio
+        )
+
+        if match and match[1] > 80:  # similarity threshold
+            converted.append(str(HINDI_NUMBERS[match[0]]))
         else:
             converted.append(word)
 
-    print(converted)
     return " ".join(converted)

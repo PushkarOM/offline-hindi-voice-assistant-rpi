@@ -75,7 +75,10 @@ HINDI_NUMBERS = {
     "उनसठ": 59,
 
     # 60
-    "साठ": 60
+    "साठ": 60,
+    "सत्तर": 70,
+    "अस्सी": 80,
+    "नब्बे": 90
 }
 
 # -------------------------------
@@ -87,16 +90,21 @@ def normalize_numbers(text: str) -> str:
     converted = []
 
     for word in words:
-        clean_word = re.sub(r"[^\w]", "", word)
 
-        # Find best fuzzy match
+        # keep only devanagari letters
+        clean_word = re.sub(r"[^\u0900-\u097F]", "", word)
+
+        if not clean_word:
+            converted.append(word)
+            continue
+
         match = process.extractOne(
             clean_word,
             HINDI_NUMBERS.keys(),
             scorer=fuzz.ratio
         )
 
-        if match and match[1] > 80:  # similarity threshold
+        if match and match[1] >= 80:
             converted.append(str(HINDI_NUMBERS[match[0]]))
         else:
             converted.append(word)

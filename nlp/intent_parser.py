@@ -185,7 +185,7 @@ def extract_timer_duration(text):
     tokens = text.split()
     total_seconds = 0
 
-    # print(tokens)
+    print(tokens)
 
     i = 0
     while i < len(tokens):
@@ -210,7 +210,7 @@ def extract_timer_duration(text):
 
         i += 1
 
-    # print(total_seconds)
+    print(total_seconds)
     return total_seconds if total_seconds > 0 else None
 
 
@@ -236,7 +236,7 @@ def detect_intent(text):
     text = normalize(text)
     text = remove_fillers(text)
     text = normalize_numbers(text)
-    # print(text)
+    print(text)
 
     # Exact Regex match
     for intent, patterns in INTENTS.items():

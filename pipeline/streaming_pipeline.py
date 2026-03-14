@@ -60,6 +60,13 @@ class StreamingAssistant:
 
                 # ACTIVE MODE
                 if self.state == "ACTIVE":
+                    if intent == "EXIT":    
+                        self.tts.speak("ठीक है, बंद हो रही हूँ")
+
+                        self.state = "IDLE"
+                        self.active_since = None
+                        self.asr.reset()
+                        continue
 
                     if intent == "UNKNOWN":
                         self.unknown_count += 1

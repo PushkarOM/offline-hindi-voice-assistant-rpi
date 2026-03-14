@@ -151,12 +151,29 @@ def generate_response(intent, original_text = None, processed_text = None, tts =
         tts = AsyncTTS()
 
         seconds = extract_timer_duration(processed_text)
-
+        print(seconds)
         if seconds:
             start_timer(seconds,tts)   
             return f"{seconds} सेकंड का टाइमर लगा दिया गया है"
 
         return "कृपया समय बताएं, जैसे 5 मिनट या 10 सेकंड"
+
+    elif intent == "INFO":
+        return """
+                मैं यह काम कर सकता हूँ:
+
+                • समय और तारीख बताना
+                
+                • मौसम बताना
+                
+                • टाइमर लगाना
+                
+                • वॉल्यूम कंट्रोल करना
+
+                • सिस्टम स्टेटस बताना
+
+                आप इनमें से कोई भी कमांड बोल सकते हैं।
+                """
 
     #  EXIT 
     elif intent == "EXIT":
